@@ -83,7 +83,7 @@ public class LinuxSyslog3164ParserWithCompAndPid extends LinuxSyslog3164ParserBa
     @Override
     public boolean parseLine(String line) {
         return parseLine(pattern, RFC3164_HEADER_TIMESTAMP_GROUP,
-                RFC3164_HEADER_HOSTNAME_GROUP, COMP_GROUP, PID_GROUP,
+                RFC3164_HEADER_HOSTNAME_GROUP, COMP_GROUP, PID_GROUP, 0,
                 MSG_GROUP, line);
     }
 

@@ -168,7 +168,7 @@ public class LinuxSyslog5424ParserBase extends LinuxSyslogLineParser {
     public boolean parseLine(String line) {
         if (parseLine(pattern, RFC5424_HEADER_TIMESTAMP_GROUP,
                 RFC5424_HEADER_HOSTNAME_GROUP, RFC5424_HEADER_APPNAME_GROUP,
-                RFC5424_HEADER_PROCID_GROUP, MSG_GROUP, line)) {
+                RFC5424_HEADER_PROCID_GROUP, RFC5424_HEADER_MSGID_GROUP, MSG_GROUP, line)) {
             /* Convert any nil values ("-") to the empty string */
             if (m_component.equals("-")) {
                 m_component = "";

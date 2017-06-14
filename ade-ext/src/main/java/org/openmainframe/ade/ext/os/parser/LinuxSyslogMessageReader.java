@@ -270,7 +270,9 @@ public class LinuxSyslogMessageReader extends AdeMessageReader {
                 gotLine = lineParser.parseLine(currentLine);
                 if (gotLine) {
                     handleMissingComponent(lineParser, currentLine);
-                    String msgId = getMessageId(lineParser);
+                    String msgId = lineParser.getMessageId();
+                    if (msgId == null)
+                        msgId = getMessageId(lineParser);
                     if (lineParser instanceof LinuxSyslog5424ParserBase) {
                         is5424Parser = true;
                     }

@@ -64,7 +64,7 @@ public class LinuxSyslog3164ParserWithMark extends LinuxSyslog3164ParserBase {
     @Override
     public boolean parseLine(String line) {
         return parseLine(pattern, RFC3164_HEADER_TIMESTAMP_GROUP,
-                RFC3164_HEADER_HOSTNAME_GROUP, 0, 0, MSG_GROUP, line);
+                RFC3164_HEADER_HOSTNAME_GROUP, 0, 0, 0, MSG_GROUP, line);
     }
 
 }

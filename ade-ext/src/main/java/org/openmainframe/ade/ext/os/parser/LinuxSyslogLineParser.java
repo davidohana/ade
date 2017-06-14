@@ -74,6 +74,8 @@ public abstract class LinuxSyslogLineParser {
      */
     protected String m_pid;
 
+    protected String m_messageid;
+
     /**
      * Body of the message.  Note: this doesn't have to be ASCII.
      */
@@ -199,7 +201,7 @@ public abstract class LinuxSyslogLineParser {
      * @return false if the line could not be parsed.
      */
     protected final boolean parseLine(Pattern pattern, int timestamp, int hostname,
-            int comp, int pid, int msg, String line) {
+            int comp, int pid, int msgId, int msg, String line) {
         final Matcher matcher = pattern.matcher(line);
         if (matcher.matches()) {
             try {
@@ -225,6 +227,7 @@ public abstract class LinuxSyslogLineParser {
                 m_msgTime = toDate(m_source, msgTimeStr);
                 m_component = toString(matcher, comp);
                 m_pid = toString(matcher, pid);
+                m_messageid = toString(matcher, msgId);
                 m_text = toString(matcher, msg);
 
                 return true;
@@ -254,6 +257,10 @@ public abstract class LinuxSyslogLineParser {
      */
     public final Date getMsgTime() {
         return m_msgTime;
+    }
+
+    public final String getMessageId() {
+        return m_messageid;
     }
 
     /**

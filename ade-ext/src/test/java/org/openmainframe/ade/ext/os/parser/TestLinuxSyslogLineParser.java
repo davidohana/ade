@@ -60,41 +60,41 @@ public class TestLinuxSyslogLineParser {
     @Test
     public void testParseLineWithBadPattern() { 
         Pattern pattern = Pattern.compile("^([(][^)]+[)])? CMD [(](.*)[)] ?$");
-        assertEquals("Pattern doesnt match ",false,lslp.parseLine(pattern,1,2,3,4,5,"() CMD ()"));
+        assertEquals("Pattern doesnt match ",false,lslp.parseLine(pattern,1,2,3,4,0,5,"() CMD ()"));
     }
     
     @Test
     public void testParseLineWithMatchingPattern() {
         Pattern pattern = Pattern.compile("^([^:]+):.*COMMAND=(.*)$");
-        assertEquals("Pattern matches for all parameters ",true,lslp.parseLine(pattern,1,2,2,2,2,"(username):.COMMAND=nub"));
+        assertEquals("Pattern matches for all parameters ",true,lslp.parseLine(pattern,1,2,2,2,0,2,"(username):.COMMAND=nub"));
     }
     
     @Test
     public void testParseLineWith255CharacterHostname() { 
         Pattern pattern = Pattern.compile("^([^:]+):.*COMMAND=(.*)$");
-        assertEquals("Pattern matches but hostname has over 255 chars ",true,lslp.parseLine(pattern,1,1,1,1,1,longString + ":.COMMAND=nub"));
+        assertEquals("Pattern matches but hostname has over 255 chars ",true,lslp.parseLine(pattern,1,1,1,1,0,1,longString + ":.COMMAND=nub"));
     }
     
     @Test
     public void testParseLineWith255CharacterHostnameSecondTime() { 
         Pattern pattern = Pattern.compile("^([^:]+):.*COMMAND=(.*)$");
-        lslp.parseLine(pattern,1,1,1,1,1,longString + ":.COMMAND=nub");
+        lslp.parseLine(pattern,1,1,1,1,0,1,longString + ":.COMMAND=nub");
         
         assertEquals("Hostname over 255 characters but we go through parseLine twice to skip the logging "
-                ,true,lslp.parseLine(pattern,1,1,1,1,1,longString + ":.COMMAND=nub"));
+                ,true,lslp.parseLine(pattern,1,1,1,1,0,1,longString + ":.COMMAND=nub"));
     }
     
     @Test
     public void testGettersGetCorrectInfoAfterRunningParseLine() {
         Pattern pattern = Pattern.compile("^([^:]+):.*COMMAND=(.*)$");
-        lslp.parseLine(pattern,0,1,2,0,0,"(username):.COMMAND=nub");
+        lslp.parseLine(pattern,0,1,2,0,0,0,"(username):.COMMAND=nub");
         
         assertEquals("The message time is thee",null,lslp.getMsgTime());
         assertEquals("The source is in the first matched group third param ","(username)",lslp.getSource());
         assertEquals("The component is in the second matched group fourth param ","nub",lslp.getComponent());
         assertEquals("Severity is never set so it is UNKNOWN ",Severity.UNKNOWN,lslp.getSeverity());
         
-        lslp.parseLine(pattern,0,0,0,1,2,"(PID!):.COMMAND=msgBody");
+        lslp.parseLine(pattern,0,0,0,1,0,2,"(PID!):.COMMAND=msgBody");
         assertEquals("The PID is in the first group and 5th param ","(PID!)",lslp.getPid());
         assertEquals("The messsage body is in second group and 6th param","msgBody",lslp.getMessageBody());
     }
@@ -102,7 +102,7 @@ public class TestLinuxSyslogLineParser {
     @Test
     public void testToString() {
         Pattern pattern = Pattern.compile("^([^:]+):.*COMMAND=(.*)$");
-        lslp.parseLine(pattern,2,2,2,2,2,"(username):.COMMAND=nub");
+        lslp.parseLine(pattern,2,2,2,2,0,2,"(username):.COMMAND=nub");
         assertEquals("Testing to String works correctly "
                 , "timestamp=(null) "
                 + "hostname=(nub) "
